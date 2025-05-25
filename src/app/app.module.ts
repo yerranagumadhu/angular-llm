@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; // Only needed for feature modules
-import { DxAccordionModule, DxListModule, DxScrollViewModule, DxTextBoxModule, DxButtonModule, DxChartModule,DxChatModule  } from 'devextreme-angular';
+import { DxAccordionModule, DxListModule, DxScrollViewModule, DxTextBoxModule, DxButtonModule, DxChartModule,DxChatModule, DxDrawerModule   } from 'devextreme-angular';
 
 
 
@@ -35,7 +35,7 @@ import { ChatComponent } from './pages/chat/chat.component';
     UnauthenticatedContentModule,
     AppRoutingModule,
     FormsModule, // ✅ required for ngModel
-    DxAccordionModule, DxListModule, DxScrollViewModule, DxTextBoxModule, DxButtonModule, DxChartModule, DxChatModule
+    DxAccordionModule, DxListModule, DxScrollViewModule, DxTextBoxModule, DxButtonModule, DxChartModule, DxChatModule,DxDrawerModule
   ],
   providers: [
     AuthService,

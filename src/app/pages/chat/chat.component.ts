@@ -64,6 +64,14 @@ export class ChatComponent implements OnInit {
     });
   }
 
+   drawerOpened = true;
+  // ... rest of your code
+
+  toggleDrawer() {
+    this.drawerOpened = !this.drawerOpened;
+  }
+
+
   toggleExpand(group: GroupedChat) {
     group.expanded = !group.expanded;
     group.displayedChats = group.expanded ? group.chats : group.chats.slice(0, 5);

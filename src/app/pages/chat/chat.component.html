@@ -1,50 +1,56 @@
-<div class="chat-container">
-  <!-- Common Header -->
-  <!-- <div class="chat-title-bar">
-    <h2>Chat Center</h2>
-  </div> -->
-
-  <div class="chat-wrapper">
-    <!-- Left side: Chat list (10%) -->
-    <div class="chat-list">
-      <dx-accordion
-        [items]="groupedChats"
-        [collapsible]="true"
-        [multiple]="true"
-      >
-        <div *dxTemplate="let data of 'title'">
-          {{ data.date }}
-        </div>
-
-        <div *dxTemplate="let data of 'item'">
-          <dx-list
-            [items]="data.displayedChats"
-            displayExpr="title"
-            (onItemClick)="onChatSelect($event)"
-          ></dx-list>
-
-          <div *ngIf="data.chats.length > 5" class="show-toggle">
-            <button (click)="toggleExpand(data)">
-              {{ data.expanded ? 'Show less' : 'Show more' }}
-            </button>
-          </div>
-        </div>
-      </dx-accordion>
+<dx-drawer
+  [opened]="drawerOpened"
+  [openedStateMode]="'shrink'"
+  [position]="'left'"
+  [minSize]="50"
+  [revealMode]="'expand'"
+  [template]="'drawerTemplate'"
+  [height]="'100%'"
+>
+  <!-- Main Chat Box -->
+  <div *dxTemplate="let data of 'content'">
+    <div class="chat-header" *ngIf="selectedChat">
+      <h3>{{ selectedChat.title }}</h3>
     </div>
 
-    <!-- Right side: Chat box (90%) -->
-    <div class="chat-box" *ngIf="selectedChat">
-      <!-- Chat session title -->
-      <div class="chat-header">
-        <h3>{{ selectedChat.title }}</h3>
-      </div>
-
-      <dx-chat
-        [dataSource]="chatMessages"
-        [user]="currentUser"
-        height="700"
-        (onMessageEntered)="onMessageEntered($event)"
-      ></dx-chat>
-    </div>
+    <dx-chat
+      *ngIf="selectedChat"
+      [dataSource]="chatMessages"
+      [user]="currentUser"
+      height="700"
+      (onMessageEntered)="onMessageEntered($event)"
+    ></dx-chat>
   </div>
-</div>
+
+  <!-- Drawer Content -->
+  <div *dxTemplate="let data of 'drawerTemplate'">
+    <div class="drawer-header">
+      <button (click)="toggleDrawer()">
+        {{ drawerOpened ? '<<' : '>>' }}
+      </button>
+      <h4 *ngIf="drawerOpened">Chat Sessions</h4>
+    </div>
+    <dx-accordion
+      *ngIf="drawerOpened"
+      [items]="groupedChats"
+      [collapsible]="true"
+      [multiple]="true"
+    >
+      <div *dxTemplate="let data of 'title'">
+        {{ data.date }}
+      </div>
+      <div *dxTemplate="let data of 'item'">
+        <dx-list
+          [items]="data.displayedChats"
+          displayExpr="title"
+          (onItemClick)="onChatSelect($event)"
+        ></dx-list>
+        <div *ngIf="data.chats.length > 5" class="show-toggle">
+          <button (click)="toggleExpand(data)">
+            {{ data.expanded ? 'Show less' : 'Show more' }}
+          </button>
+        </div>
+      </div>
+    </dx-accordion>
+  </div>
+</dx-drawer>
