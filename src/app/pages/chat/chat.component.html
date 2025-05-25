@@ -1,0 +1,57 @@
+<div class="chat-container">
+  <div class="chat-wrapper">
+    <!-- Left side: Chat list (10%) -->
+    <div class="chat-list">
+      <dx-accordion
+        [items]="groupedChats"
+        [collapsible]="true"
+        [multiple]="true"
+      >
+        <div *dxTemplate="let data of 'title'">
+          {{ data.date }}
+        </div>
+
+        <div *dxTemplate="let data of 'item'">
+          <dx-list
+            [items]="getDisplayedChats(data)"
+            displayExpr="title"
+            (onItemClick)="onChatSelect($event)"
+          ></dx-list>
+
+          <div *ngIf="data.chats.length > 5" class="show-toggle">
+            <button (click)="toggleExpand(data)">
+              {{ data.expanded ? 'Show less' : 'Show more' }}
+            </button>
+          </div>
+        </div>
+      </dx-accordion>
+    </div>
+
+    <!-- Right side: Chat box (90%) -->
+    <div class="chat-box" *ngIf="selectedChat">
+      <!-- <h3>{{ selectedChat.title }}</h3> -->
+      <!-- <dx-scroll-view height="400px">
+        <div class="chat-messages">
+          <div *ngFor="let msg of chatMessages" [class]="'msg ' + (msg.sender === 'User' ? 'user' : 'bot')">
+            <div class="msg-content">{{ msg.message }}</div>
+            <div class="msg-time">{{ msg.timestamp }}</div>
+          </div>
+        </div>
+      </dx-scroll-view>
+
+      <div class="chat-input">
+        <dx-text-box #messageBox placeholder="Type a message..."></dx-text-box>
+        <dx-button text="Send" (onClick)="sendMessage(messageBox)"></dx-button>
+      </div> -->
+      <div class="chat-box" *ngIf="selectedChat">
+      <dx-chat
+        [dataSource]="chatMessages"
+        [user]="currentUser"
+        height="700"
+        (onMessageEntered)="onMessageEntered($event)"
+      ></dx-chat>
+    </div>
+      
+    </div>
+  </div>
+</div>
