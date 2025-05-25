@@ -38,7 +38,10 @@ export class SideNavOuterToolbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.menuOpened = this.screen.sizes['screen-large'];
+    // Force initial collapse regardless of screen size
+    this.menuOpened = false;
+
+    // this.menuOpened = this.screen.sizes['screen-large'];
 
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd) {
@@ -55,14 +58,16 @@ export class SideNavOuterToolbarComponent implements OnInit {
     const isXSmall = this.screen.sizes['screen-x-small'];
     const isLarge = this.screen.sizes['screen-large'];
 
-    this.menuMode = isLarge ? 'shrink' : 'overlap';
+    // this.menuMode = isLarge ? 'shrink' : 'overlap';
+    this.menuMode = 'shrink';
     this.menuRevealMode = isXSmall ? 'slide' : 'expand';
     this.minMenuSize = isXSmall ? 0 : 60;
     this.shaderEnabled = !isLarge;
   }
 
   get hideMenuAfterNavigation() {
-    return this.menuMode === 'overlap' || this.temporaryMenuOpened;
+    // return this.menuMode === 'overlap' || this.temporaryMenuOpened;
+    return  this.temporaryMenuOpened;
   }
 
   get showMenuAfterClick() {
@@ -73,7 +78,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
     const path = (event.itemData as any).path;
     const pointerEvent = event.event;
 
-    if (path && this.menuOpened) {
+    // if (path && this.menuOpened) {
+    if (path) {
       if (event.node?.selected) {
         pointerEvent?.preventDefault();
       } else {
@@ -81,11 +87,11 @@ export class SideNavOuterToolbarComponent implements OnInit {
         this.scrollView.instance.scrollTo(0);
       }
 
-      if (this.hideMenuAfterNavigation) {
+      // if (this.hideMenuAfterNavigation) {
         this.temporaryMenuOpened = false;
         this.menuOpened = false;
         pointerEvent?.stopPropagation();
-      }
+      // }
     } else {
       pointerEvent?.preventDefault();
     }

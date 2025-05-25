@@ -21,7 +21,8 @@
     [ngClass]="swatchClassName"
     *dxTemplate="let dataMenu of 'panel'"
     (selectedItemChanged)="navigationChanged($event)"
-    (openMenu)="navigationClick()">
+    (openMenu)="navigationClick()"
+    >
   </app-side-navigation-menu>
 
   <dx-scroll-view class="with-footer">
