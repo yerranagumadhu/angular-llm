@@ -1,4 +1,9 @@
 <div class="chat-container">
+  <!-- Common Header -->
+  <!-- <div class="chat-title-bar">
+    <h2>Chat Center</h2>
+  </div> -->
+
   <div class="chat-wrapper">
     <!-- Left side: Chat list (10%) -->
     <div class="chat-list">
@@ -13,7 +18,7 @@
 
         <div *dxTemplate="let data of 'item'">
           <dx-list
-            [items]="getDisplayedChats(data)"
+            [items]="data.displayedChats"
             displayExpr="title"
             (onItemClick)="onChatSelect($event)"
           ></dx-list>
@@ -29,29 +34,17 @@
 
     <!-- Right side: Chat box (90%) -->
     <div class="chat-box" *ngIf="selectedChat">
-      <!-- <h3>{{ selectedChat.title }}</h3> -->
-      <!-- <dx-scroll-view height="400px">
-        <div class="chat-messages">
-          <div *ngFor="let msg of chatMessages" [class]="'msg ' + (msg.sender === 'User' ? 'user' : 'bot')">
-            <div class="msg-content">{{ msg.message }}</div>
-            <div class="msg-time">{{ msg.timestamp }}</div>
-          </div>
-        </div>
-      </dx-scroll-view>
+      <!-- Chat session title -->
+      <div class="chat-header">
+        <h3>{{ selectedChat.title }}</h3>
+      </div>
 
-      <div class="chat-input">
-        <dx-text-box #messageBox placeholder="Type a message..."></dx-text-box>
-        <dx-button text="Send" (onClick)="sendMessage(messageBox)"></dx-button>
-      </div> -->
-      <div class="chat-box" *ngIf="selectedChat">
       <dx-chat
         [dataSource]="chatMessages"
         [user]="currentUser"
         height="700"
         (onMessageEntered)="onMessageEntered($event)"
       ></dx-chat>
-    </div>
-      
     </div>
   </div>
 </div>

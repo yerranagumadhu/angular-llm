@@ -11,6 +11,7 @@ interface GroupedChat {
   date: string;
   chats: ChatSession[];
   expanded: boolean;
+  displayedChats: ChatSession[];  // <-- New field
 }
 
 interface ChatMessage {
@@ -51,20 +52,21 @@ export class ChatComponent implements OnInit {
         grouped.get(dateKey)!.push(chat);
       });
 
-      this.groupedChats = Array.from(grouped.entries()).map(([date, chats]) => ({
-        date,
-        chats: chats.sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime()),
-        expanded: false
-      }));
+      this.groupedChats = Array.from(grouped.entries()).map(([date, chats]) => {
+        const sortedChats = chats.sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+        return {
+          date,
+          chats: sortedChats,
+          expanded: false,
+          displayedChats: sortedChats.slice(0, 5)
+        };
+      });
     });
   }
 
   toggleExpand(group: GroupedChat) {
     group.expanded = !group.expanded;
-  }
-
-  getDisplayedChats(group: GroupedChat): ChatSession[] {
-    return group.expanded ? group.chats : group.chats.slice(0, 5);
+    group.displayedChats = group.expanded ? group.chats : group.chats.slice(0, 5);
   }
 
   onChatSelect(e: any) {
