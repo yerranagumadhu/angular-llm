@@ -1,44 +1,30 @@
+<!-- <div class="chat-container"> -->
 <dx-drawer
   [opened]="drawerOpened"
   [openedStateMode]="'shrink'"
   [position]="'left'"
-  [minSize]="50"
+  [minSize]="60"
   [revealMode]="'expand'"
   [template]="'drawerTemplate'"
   [height]="'100%'"
 >
-  <!-- Main Chat Box -->
-  <div *dxTemplate="let data of 'content'">
-    <div class="chat-header" *ngIf="selectedChat">
-      <h3>{{ selectedChat.title }}</h3>
-    </div>
-
-    <dx-chat
-      *ngIf="selectedChat"
-      [dataSource]="chatMessages"
-      [user]="currentUser"
-      height="700"
-      (onMessageEntered)="onMessageEntered($event)"
-    ></dx-chat>
-  </div>
-
-  <!-- Drawer Content -->
-  <div *dxTemplate="let data of 'drawerTemplate'">
+  <!-- Sidebar -->
+  <div *dxTemplate="let data of 'drawerTemplate'" class="chat-drawer">
     <div class="drawer-header">
       <button (click)="toggleDrawer()">
         {{ drawerOpened ? '<<' : '>>' }}
       </button>
       <h4 *ngIf="drawerOpened">Chat Sessions</h4>
     </div>
+
     <dx-accordion
       *ngIf="drawerOpened"
       [items]="groupedChats"
       [collapsible]="true"
-      [multiple]="true"
+      [multiple]="true"      
+      
     >
-      <div *dxTemplate="let data of 'title'">
-        {{ data.date }}
-      </div>
+      <div *dxTemplate="let data of 'title'">{{ data.date }}</div>
       <div *dxTemplate="let data of 'item'">
         <dx-list
           [items]="data.displayedChats"
@@ -53,4 +39,20 @@
       </div>
     </dx-accordion>
   </div>
+<!-- *dxTemplate="let data of 'content' "-->
+  <!-- Main Content -->
+  <div class="chat-box" *dxTemplate="let data of 'content' ">
+    <div class="chat-header" *ngIf="selectedChat">
+      <h3>{{ selectedChat.title }}</h3>
+    </div>
+
+    <dx-chat
+      *ngIf="selectedChat"
+      [dataSource]="chatMessages"
+      [user]="currentUser"
+      height="700"
+      (onMessageEntered)="onMessageEntered($event)"
+    ></dx-chat>
+  </div>
 </dx-drawer>
+<!-- </div> -->

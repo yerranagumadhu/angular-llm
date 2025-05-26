@@ -39,6 +39,8 @@ export class ChatComponent implements OnInit {
   currentUser: User = { id: 1, name: 'User' };
   botUser: User = { id: 2, name: 'Bot' };
 
+  
+
   constructor(private chatService: ChatSessionService) {}
 
   ngOnInit(): void {
@@ -64,18 +66,24 @@ export class ChatComponent implements OnInit {
     });
   }
 
-   drawerOpened = true;
+  drawerOpened = true;
   // ... rest of your code
+toggleGroup(group: any): void {
+  group.expanded = !group.expanded;
+}
 
   toggleDrawer() {
     this.drawerOpened = !this.drawerOpened;
   }
 
 
-  toggleExpand(group: GroupedChat) {
-    group.expanded = !group.expanded;
-    group.displayedChats = group.expanded ? group.chats : group.chats.slice(0, 5);
-  }
+  toggleExpand(group: any): void {
+  group.displayedChats = group.expanded
+    ? group.chats.slice(0, 5)
+    : group.chats;
+  group.expanded = !group.expanded;
+}
+
 
   onChatSelect(e: any) {
     this.selectedChat = e.itemData;
