@@ -14,12 +14,14 @@ import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import { ChatComponent } from './pages/chat/chat.component';
+import { OfficeLlmComponent } from './pages/office-llm/office-llm.component';
 // import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatComponent,  
+    ChatComponent,
+    OfficeLlmComponent,  
   ],
   imports: [
     BrowserModule,

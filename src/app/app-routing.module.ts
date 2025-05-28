@@ -6,6 +6,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { OfficeLlmComponent } from './pages/office-llm/office-llm.component';
 import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
 
 const routes: Routes = [
@@ -17,6 +18,11 @@ const routes: Routes = [
   {
     path: 'chat',
     component: ChatComponent ,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'office-llm',
+    component: OfficeLlmComponent ,
     canActivate: [ AuthGuardService ]
   },
   {

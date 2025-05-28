@@ -18,9 +18,14 @@ export const navigation = [
       },           
     ]
   },
-    {
+  {
     text: 'LLM Chat',
     path: '/chat',
     icon: 'chat'
+  },
+  {
+    text: 'Office LLM Chat',
+    path: '/office-llm',
+    icon: 'variable'
   },
 ];

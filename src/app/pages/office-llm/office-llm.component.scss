@@ -1,0 +1,126 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.sidebar-wrapper {
+    height: 100%;
+    display: flex;
+    transition: width 0.3s ease;
+
+    &.collapsed {
+        .sidebar {
+            width: 60px;
+            padding: 0;
+
+            .sidebar-header,
+            .date-groups {
+                display: none;
+            }
+
+            .vertical-title {
+                writing-mode: vertical-rl;
+                transform: rotate(180deg);
+                font-size: 1rem;
+                color: #007acc;
+                text-align: center;
+                cursor: pointer;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-right: 2px solid #007acc;
+                font-weight: bold;
+                background-color: #f0f4f8;
+            }
+        }
+    }
+}
+
+.sidebar {
+    width: 300px;
+    padding: 1rem;
+    background: #f0f4f8;
+    border-right: 1px solid #ccc;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    transition: width 0.3s ease;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #2a3f54;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid #007acc;
+    cursor: pointer;
+
+    .toggle-icon {
+        font-size: 1.4rem;
+        margin-right: 1rem;
+        user-select: none;
+    }
+
+    .sidebar-title {
+        flex: 1;
+        white-space: nowrap;
+    }
+
+    &:hover {
+        background-color: #e6eef5;
+    }
+}
+
+.date-group {
+    margin-bottom: 1.5rem;
+
+    h4 {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #2a3f54;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+            padding: 0.4rem 0;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s;
+
+            &:hover {
+                color: #007acc;
+                font-weight: 500;
+            }
+
+            .item-title {
+                flex: 1;
+            }
+        }
+    }
+
+    .toggle-btn {
+        background: none;
+        border: none;
+        color: #007acc;
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-top: 0.3rem;
+        padding: 0;
+        text-align: left;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
