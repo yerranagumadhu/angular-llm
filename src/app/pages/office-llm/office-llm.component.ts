@@ -53,4 +53,10 @@ export class OfficeLlmComponent implements OnInit {
     const date = items[0]?.startedAt.toDateString();
     return this.isGroupExpanded(date) ? items : items.slice(0, 5);
   }
+
+  startNewSession() {
+  console.log('New session started!');
+  // You can add logic here to reset form, route to a chat, etc.
+}
+
 }
