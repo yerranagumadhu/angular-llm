@@ -1,40 +1,47 @@
-<div class="sidebar-wrapper" [class.collapsed]="isSidebarCollapsed">
-    <div class="sidebar">
+<div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar-wrapper" [class.collapsed]="isSidebarCollapsed">
+        <div class="sidebar">
+            <!-- New Session Button -->
+            <button class="new-session-btn" (click)="startNewSession()" title="New Session">
+                <span class="new-icon">➕</span>
+                <span class="new-label" *ngIf="!isSidebarCollapsed">New Session</span>
+            </button>
 
-        <!-- New Session Button -->
-        <button class="new-session-btn" (click)="startNewSession()" title="New Session">
-            <span class="new-icon">➕</span>
-            <span class="new-label" *ngIf="!isSidebarCollapsed">New Session</span>
-        </button>
+            <!-- Expanded Header -->
+            <div class="sidebar-header" *ngIf="!isSidebarCollapsed" (click)="toggleSidebar()" title="Toggle Sidebar">
+                <span class="toggle-icon">←</span>
+                <span class="sidebar-title">🕒 Past Sessions</span>
+            </div>
 
-        <!-- Expanded Header -->
-        <div class="sidebar-header" *ngIf="!isSidebarCollapsed" (click)="toggleSidebar()" title="Toggle Sidebar">
-            <span class="toggle-icon">←</span>
-            <span class="sidebar-title">🕒 Past Sessions</span>
+            <!-- Collapsed Title -->
+            <div class="vertical-title" *ngIf="isSidebarCollapsed" (click)="toggleSidebar()" title="Expand Sidebar">
+                🕒 Past Sessions
+            </div>
+
+            <!-- Session Groups -->
+            <div *ngIf="!isSidebarCollapsed" class="date-groups">
+                <ng-container *ngFor="let groupName of groupOrder">
+                    <div *ngIf="groupedItems[groupName]?.length" class="date-group">
+                        <h4>{{ groupName }}</h4>
+                        <ul>
+                            <li *ngFor="let item of getVisibleItems(groupedItems[groupName], groupName)">
+                                <span class="item-title">{{ item.title }}</span>
+                            </li>
+                        </ul>
+                        <button *ngIf="groupedItems[groupName].length > 5" class="toggle-btn"
+                            (click)="toggleGroup(groupName)">
+                            {{ isGroupExpanded(groupName) ? 'Show Less' : 'Show More' }}
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
         </div>
+    </div>
 
-        <!-- Collapsed Vertical Title -->
-        <div class="vertical-title" *ngIf="isSidebarCollapsed" (click)="toggleSidebar()" title="Expand Sidebar">
-            🕒 Past Sessions
-        </div>
-
-        <!-- Session Groups -->
-        <div *ngIf="!isSidebarCollapsed" class="date-groups">
-            <ng-container *ngFor="let groupName of groupOrder">
-                <div *ngIf="groupedItems[groupName]?.length" class="date-group">
-                    <h4>{{ groupName }}</h4>
-                    <ul>
-                        <li *ngFor="let item of getVisibleItems(groupedItems[groupName], groupName)">
-                            <span class="item-icon">📄</span>
-                            <span class="item-title">{{ item.title }}</span>
-                        </li>
-                    </ul>
-                    <button *ngIf="groupedItems[groupName].length > 5" class="toggle-btn"
-                        (click)="toggleGroup(groupName)">
-                        {{ isGroupExpanded(groupName) ? 'Show Less' : 'Show More' }}
-                    </button>
-                </div>
-            </ng-container>
-        </div>
+    <!-- Chat Panel -->
+    <div class="chat-panel">
+        <dx-chat [items]="messages" [user]="currentUser" (onMessageEntered)="onMessageEntered($event)">
+        </dx-chat>
     </div>
 </div>

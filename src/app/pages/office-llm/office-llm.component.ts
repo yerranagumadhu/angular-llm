@@ -1,12 +1,24 @@
-// office-llm.component.ts
 import { Component, OnInit } from '@angular/core';
 import { OfficeLlmService } from './office-llm.service';
+import { Message, MessageEnteredEvent } from 'devextreme/ui/chat';
+
 
 interface Item {
   id: string;
   title: string;
   startedAt: Date;
 }
+
+interface ChatMessage {
+  id?: string | number;
+  text: string;
+  timestamp: Date;
+  author: {
+    id: string;
+    name: string;
+  };
+}
+
 
 @Component({
   selector: 'app-office-llm',
@@ -18,7 +30,24 @@ export class OfficeLlmComponent implements OnInit {
   expandedGroups: Record<string, boolean> = {};
   groupedItems: Record<string, Item[]> = {};
 
-  constructor(private officeLlmService: OfficeLlmService) {}
+  messages: Message[] = [
+    {
+      id: 1,
+      text: 'Hi! How can I help you today?',
+      timestamp: new Date(),
+      author: {
+        id: 'bot',
+        name: 'Assistant'
+      }
+    }
+  ];
+
+  currentUser = {
+    id: 'user',
+    name: 'You'
+  };
+
+  constructor(private officeLlmService: OfficeLlmService) { }
 
   ngOnInit() {
     const items = this.officeLlmService.getItems();
@@ -27,6 +56,20 @@ export class OfficeLlmComponent implements OnInit {
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
+  groupOrder = ['Today', 'Yesterday', 'Past 7 Days', 'Past 30 Days', 'Older'];
+
+  toggleGroup(label: string) {
+    this.expandedGroups[label] = !this.expandedGroups[label];
+  }
+
+  isGroupExpanded(label: string): boolean {
+    return this.expandedGroups[label] || false;
+  }
+
+  getVisibleItems(items: Item[], groupName: string): Item[] {
+    return this.isGroupExpanded(groupName) ? items : items.slice(0, 5);
   }
 
   groupByTimeFrame(items: Item[]): Record<string, Item[]> {
@@ -55,23 +98,27 @@ export class OfficeLlmComponent implements OnInit {
     return grouped;
   }
 
-  groupOrder = ['Today', 'Yesterday', 'Past 7 Days', 'Past 30 Days', 'Older'];
-
-  toggleGroup(label: string) {
-    this.expandedGroups[label] = !this.expandedGroups[label];
+  onMessageEntered(e: MessageEnteredEvent): void {
+    if (e.message && e.message.text) {
+      this.messages = [...this.messages, {
+        ...e.message,
+        id: Date.now(), // provide ID since DevExtreme may not
+        timestamp: new Date() // ensure timestamp is set
+      }];
+    }
   }
 
-  isGroupExpanded(label: string): boolean {
-    return this.expandedGroups[label] || false;
+
+
+
+  startNewSession() {
+    this.messages = [
+      {
+        id: 1,
+        text: 'New chat started. How can I help?',
+        timestamp: new Date(),
+        author: { id: 'bot', name: 'Assistant' }
+      }
+    ];
   }
-
-  getVisibleItems(items: Item[], groupName: string): Item[] {
-    return this.isGroupExpanded(groupName) ? items : items.slice(0, 5);
-  }
-
-    startNewSession() {
-  console.log('New session started!');
-  // You can add logic here to reset form, route to a chat, etc.
-}
-
 }

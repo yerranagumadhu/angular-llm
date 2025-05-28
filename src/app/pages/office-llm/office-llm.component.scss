@@ -3,6 +3,12 @@
     height: 100%;
 }
 
+.layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
 .sidebar-wrapper {
     height: 100%;
     display: flex;
@@ -190,3 +196,17 @@
         }
     }
 }
+
+.chat-panel {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    dx-chat {
+        flex: 1;
+        height: 100%;
+    }
+}
+
+// Reuse your existing styles for .new-session-btn, .sidebar-header, .date-group, etc.
