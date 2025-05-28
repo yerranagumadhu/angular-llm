@@ -34,7 +34,22 @@ export class OfficeLlmService {
     { id: '21', title: 'Code Review for Feature X', startedAt: new Date('2025-05-23') },
     { id: '22', title: 'Travel Arrangements for Conference', startedAt: new Date('2025-05-23') },
     { id: '23', title: 'Customer Support Escalation', startedAt: new Date('2025-05-22') },
-    { id: '24', title: 'Product Roadmap Discussion', startedAt: new Date('2025-05-21') }
+    { id: '24', title: 'Product Roadmap Discussion', startedAt: new Date('2025-05-21') },
+    // Auto-generated from 25 to 100
+    ...Array.from({ length: 76 }, (_, i) => {
+      const id = (25 + i).toString();
+      const dayOffset = Math.floor(Math.random() * 180); // past 6 months
+      const startedAt = new Date();
+      startedAt.setDate(startedAt.getDate() - dayOffset);
+      const categories = ['Update', 'Sync', 'Briefing', 'Review', 'Feedback', 'Fix', 'Planning'];
+      const topics = ['Marketing', 'Security', 'DevOps', 'API', 'UI', 'Database', 'Testing'];
+
+      return {
+        id,
+        title: `${categories[i % categories.length]}: ${topics[i % topics.length]}`,
+        startedAt
+      };
+    })
   ];
 
   getItems(): Item[] {
