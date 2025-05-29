@@ -25,7 +25,8 @@
                     <div *ngIf="groupedItems[groupName]?.length" class="date-group">
                         <h4>{{ groupName }}</h4>
                         <ul>
-                            <li *ngFor="let item of getVisibleItems(groupedItems[groupName], groupName)" (click)="onSessionClick(item)">
+                            <li *ngFor="let item of getVisibleItems(groupedItems[groupName], groupName)"
+                                (click)="onSessionClick(item)">
                                 <span class="item-icon">📄</span>
                                 <span class="item-title">{{ item.title }}</span>
                             </li>
@@ -39,15 +40,43 @@
             </div>
         </div>
     </div>
+    <!-- ── INSERT CONTROL PANEL HERE ── -->
+    <div class="control-card">
+        <h3 class="control-card__title">Content &amp; Prompts</h3>
+        <div class="control-panel">
+            <!-- group 1 -->
+            <div class="control-group">
+                <h4>Content Configuration</h4>
+                <dx-select-box [dataSource]="audiences" displayExpr="text" valueExpr="id" placeholder="Select Audience"
+                    [(value)]="selectedAudience">
+                </dx-select-box>
+                <dx-select-box [dataSource]="docTypes" displayExpr="text" valueExpr="id"
+                    placeholder="Select Document Type" [(value)]="selectedDocType">
+                </dx-select-box>
+            </div>
+            <div class="control-group">
+                <h4>Upload Document</h4>
+                <dx-file-uploader [uploadMode]="'instantly'" selectButtonText="Choose File..."
+                    labelText="No file selected" (onUploaded)="onFileUploaded($event)">
+                </dx-file-uploader>
+            </div>
+            <div class="control-group">
+                <h4>Prompt Library</h4>
+                <dx-select-box [dataSource]="prompts" displayExpr="text" valueExpr="id" placeholder="Choose a Prompt"
+                    [(value)]="selectedPrompt">
+                </dx-select-box>
+            </div>
+        </div>
+    </div>
+    <!-- ── END INSERT ── -->
+
 
     <!-- Chat Panel -->
     <div class="chat-panel">
         <div class="chat-title" *ngIf="selectedItemTitle">
             <h2>{{ selectedItemTitle }}</h2> <!-- Display the selected chat title -->
         </div>
-        <dx-chat 
-            [items]="messages" [user]="currentUser" (onMessageEntered)="onMessageEntered($event)"
-        >
+        <dx-chat [items]="messages" [user]="currentUser" (onMessageEntered)="onMessageEntered($event)">
         </dx-chat>
     </div>
 </div>

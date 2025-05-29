@@ -13,7 +13,7 @@
     height: 100%;
     display: flex;
     transition: width 0.3s ease;
-    padding: 16px;;
+    padding-top: 1rem;
 
     &.collapsed {
         .sidebar {
@@ -201,7 +201,7 @@
 
 .chat-panel {
     flex: 1;
-    padding: 1rem;
+    padding-top: 1rem;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -217,22 +217,64 @@
 .chat-title {
     padding: 0.11rem;
     background-color: #f0f4f8;
-    font-size: 1.2rem;  // Set font size for .chat-title (if needed)
+    font-size: 1.2rem; // Set font size for .chat-title (if needed)
     font-weight: bold;
     color: #2a3f54;
     border-bottom: 2px solid #007acc;
     text-align: center;
-    
+
     h2 {
-        font-size: 1.2rem !important;  // Override h2 font size inside .chat-title
-        margin: 0;  // Optionally reset margin for h2 if necessary
+        font-size: 1.2rem !important; // Override h2 font size inside .chat-title
+        margin: 0; // Optionally reset margin for h2 if necessary
     }
 }
 
 
 .layout {
-    // background-color: #a7f823 !important; // Example background color for the scrollable container
-    max-height: 700px; // Ensure the layout does not exceed viewport height
-    overflow: auto;  // Scroll only when the content overflows
+    max-height: 750px; // Ensure the layout does not exceed viewport height
+    overflow: hidden; // Scroll only when the content overflows
 }
 
+.control-card {
+    width: 15%;
+    margin: 1rem auto 0;
+    /* <-- add top gap of 1.5rem */
+    background: #fff;
+    border: 1px solid #d5dce0;
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    &__title {
+        margin: 0 0 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2a3f54;
+        text-align: center;
+        white-space: nowrap;
+        /* prevent title wrapping */
+    }
+
+    .control-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .control-group {
+        /* Remove any 100% width that was forcing it to fill */
+        max-width: 100%;
+
+        h4 {
+            margin: 0 0 .5rem;
+            font-size: .95rem;
+        }
+
+        dx-select-box,
+        dx-file-uploader {
+            width: 100%;
+            /* will fill within the 10% card width */
+            margin-bottom: .75rem;
+        }
+    }
+}

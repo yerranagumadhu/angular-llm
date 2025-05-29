@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OfficeLlmService } from './office-llm.service';
 import { Message, MessageEnteredEvent } from 'devextreme/ui/chat';
-import { loadMessages } from 'devextreme/localization';
+
 
 interface Item {
   id: string;
@@ -30,7 +30,7 @@ export class OfficeLlmComponent implements OnInit {
   groupedItems: Record<string, Item[]> = {};
   selectedItemTitle: string = '';  // Track the selected item's title
 
-  
+
   messages: Message[] = [
     {
       id: 1,
@@ -49,14 +49,46 @@ export class OfficeLlmComponent implements OnInit {
   };
 
   localization: any;
-  
+
   constructor(private officeLlmService: OfficeLlmService) { }
+
+  // ── NEW: dropdown + uploader data sources ──
+  audiences = [
+    { id: 'all', text: 'All Users' },
+    { id: 'internal', text: 'Internal Only' },
+    { id: 'external', text: 'External Partners' },
+  ];
+  docTypes = [
+    { id: 'report', text: 'Report' },
+    { id: 'guide', text: 'User Guide' },
+    { id: 'spec', text: 'Specification' },
+  ];
+  prompts = [
+    { id: 'summarize', text: 'Summarize Document' },
+    { id: 'questionGen', text: 'Generate Questions' },
+    { id: 'translate', text: 'Translate to Spanish' },
+  ];
+
+  // ── NEW: selected values ──
+  selectedAudience: string | null = null;
+  selectedDocType: string | null = null;
+  selectedPrompt: string | null = null;
+
+  // ── NEW: file upload handler ──
+  onFileUploaded(e: any) {
+    const file = e.component._files?.[0];
+    if (file) {
+      console.log('Uploaded:', file.name);
+      // TODO: read/send file contents as needed
+    }
+  }
+
 
   ngOnInit() {
     const items = this.officeLlmService.getItems();
     this.groupedItems = this.groupByTimeFrame(items);
-    
-    
+
+
     // Load localization (for example, 'en' for English)
     this.localization = this.officeLlmService.getLocalization('en');
   }
