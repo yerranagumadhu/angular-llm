@@ -13,6 +13,7 @@
     height: 100%;
     display: flex;
     transition: width 0.3s ease;
+    padding: 16px;;
 
     &.collapsed {
         .sidebar {
@@ -35,7 +36,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-right: 2px solid #007acc;
+                border-right: 2px solid #cdd9e0;
                 font-weight: bold;
                 background-color: #f0f4f8;
             }
@@ -72,7 +73,8 @@
     scroll-behavior: smooth;
     transition: width 0.3s ease;
     position: relative;
-    border: 2px solid #6dbbee;
+    border: 2px solid #d5dce0;
+    border-radius: 15px;
 }
 
 // New Session Button
@@ -202,6 +204,7 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    height: 100%;
 
     dx-chat {
         flex: 1;
@@ -210,3 +213,26 @@
 }
 
 // Reuse your existing styles for .new-session-btn, .sidebar-header, .date-group, etc.
+
+.chat-title {
+    padding: 0.11rem;
+    background-color: #f0f4f8;
+    font-size: 1.2rem;  // Set font size for .chat-title (if needed)
+    font-weight: bold;
+    color: #2a3f54;
+    border-bottom: 2px solid #007acc;
+    text-align: center;
+    
+    h2 {
+        font-size: 1.2rem !important;  // Override h2 font size inside .chat-title
+        margin: 0;  // Optionally reset margin for h2 if necessary
+    }
+}
+
+
+.layout {
+    // background-color: #a7f823 !important; // Example background color for the scrollable container
+    max-height: 700px; // Ensure the layout does not exceed viewport height
+    overflow: auto;  // Scroll only when the content overflows
+}
+

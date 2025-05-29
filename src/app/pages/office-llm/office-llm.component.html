@@ -25,7 +25,8 @@
                     <div *ngIf="groupedItems[groupName]?.length" class="date-group">
                         <h4>{{ groupName }}</h4>
                         <ul>
-                            <li *ngFor="let item of getVisibleItems(groupedItems[groupName], groupName)">
+                            <li *ngFor="let item of getVisibleItems(groupedItems[groupName], groupName)" (click)="onSessionClick(item)">
+                                <span class="item-icon">📄</span>
                                 <span class="item-title">{{ item.title }}</span>
                             </li>
                         </ul>
@@ -41,7 +42,12 @@
 
     <!-- Chat Panel -->
     <div class="chat-panel">
-        <dx-chat [items]="messages" [user]="currentUser" (onMessageEntered)="onMessageEntered($event)">
+        <div class="chat-title" *ngIf="selectedItemTitle">
+            <h2>{{ selectedItemTitle }}</h2> <!-- Display the selected chat title -->
+        </div>
+        <dx-chat 
+            [items]="messages" [user]="currentUser" (onMessageEntered)="onMessageEntered($event)"
+        >
         </dx-chat>
     </div>
 </div>

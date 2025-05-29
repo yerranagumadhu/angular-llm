@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OfficeLlmService } from './office-llm.service';
 import { Message, MessageEnteredEvent } from 'devextreme/ui/chat';
-
+import { loadMessages } from 'devextreme/localization';
 
 interface Item {
   id: string;
@@ -19,7 +19,6 @@ interface ChatMessage {
   };
 }
 
-
 @Component({
   selector: 'app-office-llm',
   templateUrl: './office-llm.component.html',
@@ -29,7 +28,9 @@ export class OfficeLlmComponent implements OnInit {
   isSidebarCollapsed = false;
   expandedGroups: Record<string, boolean> = {};
   groupedItems: Record<string, Item[]> = {};
+  selectedItemTitle: string = '';  // Track the selected item's title
 
+  
   messages: Message[] = [
     {
       id: 1,
@@ -47,11 +48,17 @@ export class OfficeLlmComponent implements OnInit {
     name: 'You'
   };
 
+  localization: any;
+  
   constructor(private officeLlmService: OfficeLlmService) { }
 
   ngOnInit() {
     const items = this.officeLlmService.getItems();
     this.groupedItems = this.groupByTimeFrame(items);
+    
+    
+    // Load localization (for example, 'en' for English)
+    this.localization = this.officeLlmService.getLocalization('en');
   }
 
   toggleSidebar() {
@@ -108,14 +115,24 @@ export class OfficeLlmComponent implements OnInit {
     }
   }
 
-
-
-
   startNewSession() {
     this.messages = [
       {
         id: 1,
         text: 'New chat started. How can I help?',
+        timestamp: new Date(),
+        author: { id: 'bot', name: 'Assistant' }
+      }
+    ];
+  }
+
+  // Handle session click and update the title
+  onSessionClick(item: Item) {
+    this.selectedItemTitle = item.title;  // Set the title of the clicked session
+    this.messages = [
+      {
+        id: 1,
+        text: `Session started: ${item.title}`,
         timestamp: new Date(),
         author: { id: 'bot', name: 'Assistant' }
       }

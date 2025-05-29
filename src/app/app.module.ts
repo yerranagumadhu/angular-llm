@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; // Only needed for feature modules
@@ -44,6 +44,7 @@ import { OfficeLlmComponent } from './pages/office-llm/office-llm.component';
     ScreenService,
     AppInfoService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]  // Add this line to suppress the error
 })
 export class AppModule { }

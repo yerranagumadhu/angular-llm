@@ -55,4 +55,20 @@ export class OfficeLlmService {
   getItems(): Item[] {
     return this.rawItems;
   }
+
+ // Localization strings
+  getLocalization(language: string) {
+    const translations = {
+      en: {
+        'dxChat-emptyListMessage': 'Chat is Empty',
+        'dxChat-emptyListPrompt': 'AI Assistant is ready to answer your questions.',
+        'dxChat-textareaPlaceholder': 'Ask AI Assistant...'
+      },     
+    };
+
+    // Return the localized strings based on the provided language, defaulting to 'en'
+    return translations['en'];
+  }
 }
+
+
