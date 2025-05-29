@@ -13,6 +13,7 @@ import {
   DxDrawerModule,
   DxSelectBoxModule,
   DxFileUploaderModule,
+  DxTextAreaModule ,
 } from 'devextreme-angular';
 
 
@@ -49,7 +50,7 @@ import { OfficeLlmComponent } from './pages/office-llm/office-llm.component';
     AppRoutingModule,
     FormsModule, // ✅ required for ngModel
     DxAccordionModule, DxListModule, DxScrollViewModule, DxTextBoxModule, DxButtonModule, DxChartModule, DxChatModule,DxDrawerModule,
-    DxSelectBoxModule, DxFileUploaderModule,
+    DxSelectBoxModule, DxFileUploaderModule, DxTextAreaModule 
   ],
   providers: [
     AuthService,

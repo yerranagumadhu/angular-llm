@@ -6,6 +6,11 @@ interface Item {
   startedAt: Date;
 }
 
+export interface Prompt {
+  id: string;
+  text: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -52,23 +57,47 @@ export class OfficeLlmService {
     })
   ];
 
+  // -------- Prompts management --------
+  private STORAGE_KEY = 'officeLlm.prompts';
+  private builtInPrompts: Prompt[] = [
+    { id: 'summarize', text: 'Please summarize the following document in 3–4 bullet points:' },
+    { id: 'questionGen', text: 'Based on the document, generate 5 comprehension questions:' },
+    { id: 'translate', text: 'Translate the entire document into Spanish, preserving technical terms:' }
+  ];
+  private prompts: Prompt[] = [];
+
+  constructor() {
+    // load or initialize prompts
+    const stored = localStorage.getItem(this.STORAGE_KEY);
+    if (stored) {
+      try {
+        const custom: Prompt[] = JSON.parse(stored);
+        this.prompts = [...this.builtInPrompts];
+      } catch {
+        this.prompts = [...this.builtInPrompts];
+      }
+    } else {
+      this.prompts = [...this.builtInPrompts];
+    }
+    console.log('Loaded prompts:', this.prompts);
+  }
+
+  // Items API
   getItems(): Item[] {
     return this.rawItems;
   }
 
- // Localization strings
-  getLocalization(language: string) {
-    const translations = {
-      en: {
-        'dxChat-emptyListMessage': 'Chat is Empty',
-        'dxChat-emptyListPrompt': 'AI Assistant is ready to answer your questions.',
-        'dxChat-textareaPlaceholder': 'Ask AI Assistant...'
-      },     
-    };
-
-    // Return the localized strings based on the provided language, defaulting to 'en'
-    return translations['en'];
+  // Prompts API
+  getPrompts(): Prompt[] {
+    return [...this.prompts];
   }
+
+  savePrompt(newPrompt: Prompt): void {
+    // add to memory
+    this.prompts.push(newPrompt);
+    // persist only custom prompts
+    const custom = this.prompts.filter(p => !this.builtInPrompts.find(b => b.id === p.id));
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(custom));
+  }
+
 }
-
-

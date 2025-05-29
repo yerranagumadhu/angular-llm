@@ -81,10 +81,34 @@
             </div>
             <div class="control-group">
                 <h4>Prompt Library</h4>
+
+                <!-- Prompt selector -->
                 <dx-select-box [dataSource]="prompts" displayExpr="text" valueExpr="id" placeholder="Choose a Prompt"
-                    [(value)]="selectedPrompt">
+                    [(value)]="selectedPrompt" (onValueChanged)="onPromptChange($event.value)">
                 </dx-select-box>
+
+                <!-- Only show textarea & actions when there’s promptText -->
+                <div *ngIf="promptText" class="prompt-textarea-wrapper">
+                    <dx-text-area [(value)]="promptText" height="200" placeholder="Edit or expand your prompt here">
+                    </dx-text-area>
+
+                    <div class="prompt-actions">
+                        <!-- COPY -->
+                        <button class="action-btn copy-btn" [class.filled]="isCopied" title="Copy to clipboard"
+                            (click)="copyPrompt()">
+                            <i class="dx-icon dx-icon-copy"></i>
+                        </button>
+
+                        <!-- FAVORITE -->
+                        <button class="action-btn fav-btn" [class.filled]="isCurrentPromptFavorite()"
+                            title="Save to library" (click)="savePromptToLibrary()">
+                            <i class="dx-icon dx-icon-favorites"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
+
+
         </div>
     </div>
     <!-- ── END INSERT ── -->

@@ -237,7 +237,7 @@
 
 .control-card {
     position: relative; // allow absolute children
-    width: 15%;
+    width: 25%;
     margin: 1rem auto 0;
     /* <-- add top gap of 1.5rem */
     background: #fff;
@@ -346,3 +346,67 @@
 .control-card__toggle .dx-icon-chevronup {
     transform: rotate(180deg);
 }
+
+.prompt-textarea-wrapper {
+  margin-top: 1rem;
+  position: relative;
+
+ 
+}
+
+.prompt-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  .action-btn {
+    background: #fff;
+    border: 1px solid #cdd9e0;
+    border-radius: 4px;
+    padding: 0.25rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+
+    i.dx-icon {
+      font-size: 1.2rem;
+      color: #2a3f54;
+      transition: color 0.2s;
+    }
+
+    &:hover {
+      background: #e6f0fa;
+      border-color: #007acc;
+      i.dx-icon { color: #007acc; }
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,122,204,0.3);
+    }
+  }
+
+  // copy flashes fill
+  .copy-btn.filled {
+    background: #007acc;
+    border-color: #005a9e;
+
+    i.dx-icon {
+      color: #fff;
+    }
+  }
+
+  // favorite stays filled
+  .fav-btn.filled {
+    background: #fde047; // gold-ish
+    border-color: #f59e0b;
+
+    i.dx-icon {
+      color: #f59e0b;
+    }
+  }
+}
+

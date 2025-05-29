@@ -5,7 +5,7 @@ export class AppInfoService {
   constructor() {}
 
   public get title() {
-    return 'Llm Chat App v1';
+    return 'Cooperate communication LLM App';
   }
 
   public get currentYear() {

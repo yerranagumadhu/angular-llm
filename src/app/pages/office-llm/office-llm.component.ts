@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OfficeLlmService } from './office-llm.service';
+import { OfficeLlmService, Prompt  } from './office-llm.service';
 import { Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 
 
@@ -30,6 +30,39 @@ export class OfficeLlmComponent implements OnInit {
   groupedItems: Record<string, Item[]> = {};
   selectedItemTitle: string = '';  // Track the selected item's title
 
+  // Map your prompt IDs to starter text:
+  predefinedPromptMap: Record<string, string> = {
+    summarize: `Please summarize the following document in 3–4 bullet points:`,
+    questionGen: `Based on the document, generate 5 comprehension questions:`,
+    translate: `Translate the entire document into Spanish, preserving technical terms:`
+  };
+
+   // Hold the current textbox value:
+  promptText: string = '';
+
+  // Whenever selection changes, update the promptText:
+ onPromptChange(id: string|null) {
+  if (!id) {
+    this.promptText = '';
+    return;
+  }
+
+  // 1) First try your built-in map
+  if (this.predefinedPromptMap[id]) {
+    this.promptText = this.predefinedPromptMap[id];
+    return;
+  }
+
+  // 2) If not built-in, look through the prompt library array
+  const custom = this.prompts.find(p => p.id === id);
+  if (custom) {
+    this.promptText = custom.text;
+  } else {
+    // 3) Fallback to empty
+    this.promptText = '';
+  }
+}
+
 
   messages: Message[] = [
     {
@@ -49,6 +82,10 @@ export class OfficeLlmComponent implements OnInit {
   };
 
   localization: any;
+
+  // new state trackers
+  isCopied = false;
+  favoritePromptIds = new Set<string>();
 
   constructor(private officeLlmService: OfficeLlmService) { }
 
@@ -89,8 +126,7 @@ export class OfficeLlmComponent implements OnInit {
     this.groupedItems = this.groupByTimeFrame(items);
 
 
-    // Load localization (for example, 'en' for English)
-    this.localization = this.officeLlmService.getLocalization('en');
+    this.prompts = this.officeLlmService.getPrompts();
   }
 
   toggleSidebar() {
@@ -177,4 +213,42 @@ toggleControl() {
       }
     ];
   }
+
+ 
+
+  // Called when user clicks the star/favorites icon
+
+
+// copy handler
+  copyPrompt() {
+    if (!this.promptText) { return; }
+    navigator.clipboard.writeText(this.promptText)
+      .then(() => {
+        this.isCopied = true;
+        // revert after 800ms
+        setTimeout(() => this.isCopied = false, 800);
+      })
+      .catch(err => console.error('Copy failed:', err));
+  }
+
+  // save handler
+  savePromptToLibrary() {
+    if (!this.promptText) return;
+    const newPrompt: Prompt = {
+      id: `custom_${Date.now()}`,
+      text: this.promptText
+    };
+    this.officeLlmService.savePrompt(newPrompt);
+    this.prompts = this.officeLlmService.getPrompts();
+    // mark this one as favorite
+    this.favoritePromptIds.add(newPrompt.id);
+  }
+
+  // helper for template
+  isCurrentPromptFavorite(): boolean {
+    console.log('Checking selected for:', this.selectedPrompt);
+    console.log('Checking favorite for:', this.favoritePromptIds);
+    return this.selectedPrompt ? this.favoritePromptIds.has(this.selectedPrompt) : false;
+  }
+
 }
