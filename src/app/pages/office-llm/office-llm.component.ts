@@ -97,6 +97,13 @@ export class OfficeLlmComponent implements OnInit {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
+   // ── NEW: control panel collapsed state ──
+  isControlCollapsed = false;
+
+toggleControl() {
+  this.isControlCollapsed = !this.isControlCollapsed;
+}
+
   groupOrder = ['Today', 'Yesterday', 'Past 7 Days', 'Past 30 Days', 'Older'];
 
   toggleGroup(label: string) {

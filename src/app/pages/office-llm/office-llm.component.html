@@ -41,9 +41,28 @@
         </div>
     </div>
     <!-- ── INSERT CONTROL PANEL HERE ── -->
-    <div class="control-card">
-        <h3 class="control-card__title">Content &amp; Prompts</h3>
-        <div class="control-panel">
+    <div class="control-card" [class.collapsed]="isControlCollapsed">
+        <!-- Header always shows the toggle (and horizontal title when expanded) -->
+        <div class="control-card__header">
+            <button class="control-card__toggle" (click)="toggleControl()">
+                <i class="dx-icon" [ngClass]="{
+                'dx-icon-chevrondoubleleft': !isControlCollapsed,
+                'dx-icon-chevronright': isControlCollapsed
+                }"></i>
+            </button>
+            <h3 *ngIf="!isControlCollapsed" class="control-card__title">
+                📝 Content &amp; Prompts
+            </h3>
+        </div>
+
+        <!-- Vertical title spans entire card when collapsed -->
+        <div *ngIf="isControlCollapsed" class="control-card__vertical-title" (click)="toggleControl()">
+            📝 Content &amp; Prompts
+        </div>
+
+
+        <!-- only show when expanded -->
+        <div class="control-panel" *ngIf="!isControlCollapsed">
             <!-- group 1 -->
             <div class="control-group">
                 <h4>Content Configuration</h4>

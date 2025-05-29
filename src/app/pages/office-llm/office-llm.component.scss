@@ -236,6 +236,7 @@
 }
 
 .control-card {
+    position: relative; // allow absolute children
     width: 15%;
     margin: 1rem auto 0;
     /* <-- add top gap of 1.5rem */
@@ -244,6 +245,10 @@
     border-radius: 6px;
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: width 0.3s ease; // will animate if explicit widths used
+    overflow: hidden; // hide any overflow
+    display: inline-block; // shrink-wrap width
+    vertical-align: top; // sit nicely in flow
 
     &__title {
         margin: 0 0 1rem;
@@ -254,6 +259,7 @@
         white-space: nowrap;
         /* prevent title wrapping */
     }
+
 
     .control-panel {
         display: flex;
@@ -277,4 +283,66 @@
             margin-bottom: .75rem;
         }
     }
+
+    /* … your existing card styles … */
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        margin-bottom: 0.75rem;
+
+    }
+
+    &__toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+
+        i.dx-icon {
+            font-size: 1.1rem;
+            transition: transform 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    &__vertical-title {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%; // span full height
+        width: 100%; // fill collapsed width (e.g. 60px)
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        cursor: pointer;
+        background: #fff; // match card bg
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2a3f54;
+    }
+
+
+    // Collapsed state: exactly like your sidebar
+    &.collapsed {
+        width: 60px; // collapsed width
+        padding: 0; // remove padding so vert title aligns
+
+        .control-panel,
+        &__header .control-card__title {
+            display: none; // hide panel & horiz title
+        }
+    }
+}
+
+/* Optional: rotate the icon when collapsed */
+.control-card__toggle .dx-icon-chevrondown {
+    transform: rotate(0deg);
+}
+
+.control-card__toggle .dx-icon-chevronup {
+    transform: rotate(180deg);
 }
