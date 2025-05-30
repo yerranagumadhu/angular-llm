@@ -6,10 +6,13 @@ interface Item {
   startedAt: Date;
 }
 
+// after:
 export interface Prompt {
   id: string;
-  text: string;
+  name: string;  // label for the dropdown
+  text: string;  // the actual prompt content
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -60,25 +63,46 @@ export class OfficeLlmService {
   // -------- Prompts management --------
   private STORAGE_KEY = 'officeLlm.prompts';
   private builtInPrompts: Prompt[] = [
-    { id: 'summarize', text: 'Please summarize the following document in 3–4 bullet points:' },
-    { id: 'questionGen', text: 'Based on the document, generate 5 comprehension questions:' },
-    { id: 'translate', text: 'Translate the entire document into Spanish, preserving technical terms:' }
-  ];
+  {
+    id: 'summarize',
+    name: 'Summarize Document',
+    text: 'Please summarize the following document in 3–4 bullet points:'
+  },
+  {
+    id: 'questionGen',
+    name: 'Generate Questions',
+    text: 'Based on the document, generate 5 comprehension questions:'
+  },
+  {
+    id: 'translate',
+    name: 'Translate to Spanish',
+    text: 'Translate the entire document into Spanish, preserving technical terms:'
+  }
+];
+
   private prompts: Prompt[] = [];
 
   constructor() {
-    // load or initialize prompts
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-    if (stored) {
-      try {
-        const custom: Prompt[] = JSON.parse(stored);
-        this.prompts = [...this.builtInPrompts];
-      } catch {
-        this.prompts = [...this.builtInPrompts];
-      }
-    } else {
-      this.prompts = [...this.builtInPrompts];
-    }
+
+    // ← clear only our prompts key on every load
+    localStorage.removeItem(this.STORAGE_KEY);
+// load or initialize prompts
+const stored = localStorage.getItem(this.STORAGE_KEY);
+if (stored) {
+  try {
+    const customRaw: Array<{id: string; text: string}> = JSON.parse(stored);
+    const custom: Prompt[] = customRaw.map(r => ({
+      id: r.id,
+      name: r.text,   // default the “name” to the text if you didn’t store a separate name
+      text: r.text
+    }));
+    this.prompts = [...this.builtInPrompts, ...custom];
+  } catch {
+    this.prompts = [...this.builtInPrompts];
+  }
+} else {
+  this.prompts = [...this.builtInPrompts];
+}
     console.log('Loaded prompts:', this.prompts);
   }
 
@@ -99,5 +123,18 @@ export class OfficeLlmService {
     const custom = this.prompts.filter(p => !this.builtInPrompts.find(b => b.id === p.id));
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(custom));
   }
+
+  // after savePrompt…
+updatePrompt(updated: Prompt): void {
+  const idx = this.prompts.findIndex(p => p.id === updated.id);
+  if (idx >= 0) {
+    this.prompts[idx] = updated;
+    // re-persist your custom ones
+    const custom = this.prompts.filter(p =>
+      !this.builtInPrompts.some(b => b.id === p.id)
+    );
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(custom));
+  }
+}
 
 }

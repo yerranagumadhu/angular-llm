@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OfficeLlmService, Prompt  } from './office-llm.service';
+import { OfficeLlmService, Prompt } from './office-llm.service';
 import { Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 
 
@@ -37,31 +37,25 @@ export class OfficeLlmComponent implements OnInit {
     translate: `Translate the entire document into Spanish, preserving technical terms:`
   };
 
-   // Hold the current textbox value:
+  // Hold the current textbox value:
   promptText: string = '';
+  // state for showing the textbox and capturing the name
+  showFavoriteNaming = false;
+  favoriteName = '';
 
   // Whenever selection changes, update the promptText:
- onPromptChange(id: string|null) {
-  if (!id) {
-    this.promptText = '';
-    return;
+  // Before you only had `text`
+  onPromptChange(id: string | null) {
+    
+    if (!id) {
+      this.promptText = '';
+      return;
+    }
+    const p = this.prompts.find(p => p.id === id);
+    this.promptText = p ? p.text : '';
+    this.showFavoriteNaming = false;
   }
 
-  // 1) First try your built-in map
-  if (this.predefinedPromptMap[id]) {
-    this.promptText = this.predefinedPromptMap[id];
-    return;
-  }
-
-  // 2) If not built-in, look through the prompt library array
-  const custom = this.prompts.find(p => p.id === id);
-  if (custom) {
-    this.promptText = custom.text;
-  } else {
-    // 3) Fallback to empty
-    this.promptText = '';
-  }
-}
 
 
   messages: Message[] = [
@@ -100,11 +94,7 @@ export class OfficeLlmComponent implements OnInit {
     { id: 'guide', text: 'User Guide' },
     { id: 'spec', text: 'Specification' },
   ];
-  prompts = [
-    { id: 'summarize', text: 'Summarize Document' },
-    { id: 'questionGen', text: 'Generate Questions' },
-    { id: 'translate', text: 'Translate to Spanish' },
-  ];
+  prompts: Prompt[] = [];
 
   // ── NEW: selected values ──
   selectedAudience: string | null = null;
@@ -133,12 +123,12 @@ export class OfficeLlmComponent implements OnInit {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
-   // ── NEW: control panel collapsed state ──
+  // ── NEW: control panel collapsed state ──
   isControlCollapsed = false;
 
-toggleControl() {
-  this.isControlCollapsed = !this.isControlCollapsed;
-}
+  toggleControl() {
+    this.isControlCollapsed = !this.isControlCollapsed;
+  }
 
   groupOrder = ['Today', 'Yesterday', 'Past 7 Days', 'Past 30 Days', 'Older'];
 
@@ -214,12 +204,12 @@ toggleControl() {
     ];
   }
 
- 
+
 
   // Called when user clicks the star/favorites icon
 
 
-// copy handler
+  // copy handler
   copyPrompt() {
     if (!this.promptText) { return; }
     navigator.clipboard.writeText(this.promptText)
@@ -230,14 +220,17 @@ toggleControl() {
       })
       .catch(err => console.error('Copy failed:', err));
   }
+  
 
   // save handler
   savePromptToLibrary() {
     if (!this.promptText) return;
     const newPrompt: Prompt = {
       id: `custom_${Date.now()}`,
-      text: this.promptText
+      name: this.favoriteName.trim(),    // <- the label the user just entered
+      text: this.promptText              // <- the actual prompt content
     };
+
     this.officeLlmService.savePrompt(newPrompt);
     this.prompts = this.officeLlmService.getPrompts();
     // mark this one as favorite
@@ -247,8 +240,61 @@ toggleControl() {
   // helper for template
   isCurrentPromptFavorite(): boolean {
     console.log('Checking selected for:', this.selectedPrompt);
-    console.log('Checking favorite for:', this.favoritePromptIds);
+    console.log('Checking favorite for:', this.favoritePromptIds);    
     return this.selectedPrompt ? this.favoritePromptIds.has(this.selectedPrompt) : false;
+  }
+
+  // add this helper to look up a Prompt by id
+getPromptById(id: string): Prompt | undefined {
+  return this.prompts.find(p => p.id === id);
+}
+  // When user first clicks the star…
+ onFavoriteClick() {
+  // if this prompt is already favorited, prefill its name
+  if ( this.selectedPrompt) {
+    const existing = this.getPromptById(this.selectedPrompt);
+    this.favoriteName = existing?.name || '';
+  } else {
+    // new favorite: start blank
+    this.favoriteName = '';
+  }
+
+  // always show the naming UI
+  this.showFavoriteNaming = true;
+}
+
+confirmFavoriteName() {
+  const name = this.favoriteName.trim();
+  if (!name) { return; }
+
+  // build & save new favorite
+  const newPrompt: Prompt = {
+    id: `custom_${Date.now()}`,
+    name,
+    text: this.promptText
+  };
+  this.officeLlmService.savePrompt(newPrompt);
+
+  // re-load prompts from the service
+  this.prompts = this.officeLlmService.getPrompts();
+
+  // **select** the newly created prompt so that onFavoriteClick → prefill works
+  this.selectedPrompt = newPrompt.id;
+
+  // also mark it in your favorites set
+  this.favoritePromptIds.add(newPrompt.id);
+
+  // close the naming UI
+  this.showFavoriteNaming = false;
+}
+
+
+
+
+
+  // If they cancel…
+  cancelFavoriteNaming() {
+    this.showFavoriteNaming = false;
   }
 
 }

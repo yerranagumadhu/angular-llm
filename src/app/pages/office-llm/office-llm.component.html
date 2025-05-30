@@ -83,7 +83,7 @@
                 <h4>Prompt Library</h4>
 
                 <!-- Prompt selector -->
-                <dx-select-box [dataSource]="prompts" displayExpr="text" valueExpr="id" placeholder="Choose a Prompt"
+                <dx-select-box [dataSource]="prompts" displayExpr="name" valueExpr="id" placeholder="Choose a Prompt"
                     [(value)]="selectedPrompt" (onValueChanged)="onPromptChange($event.value)">
                 </dx-select-box>
 
@@ -101,9 +101,21 @@
 
                         <!-- FAVORITE -->
                         <button class="action-btn fav-btn" [class.filled]="isCurrentPromptFavorite()"
-                            title="Save to library" (click)="savePromptToLibrary()">
-                            <i class="dx-icon dx-icon-favorites"></i>
+                            title="Save to library" (click)="onFavoriteClick()">
+                            <i class="dx-icon dx-icon-add"></i>
                         </button>
+                        <!-- only show when we’re renaming/saving -->
+                        <div *ngIf="showFavoriteNaming" class="favorite-naming">
+                            <dx-text-box [(value)]="favoriteName" placeholder="Enter favorite name…">
+                            </dx-text-box>
+                            <button class="action-btn" title="Confirm" (click)="confirmFavoriteName()">
+                                <i class="dx-icon dx-icon-check"></i>
+                            </button>
+                            <button class="action-btn" title="Cancel" (click)="cancelFavoriteNaming()">
+                                <i class="dx-icon dx-icon-close"></i>
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
